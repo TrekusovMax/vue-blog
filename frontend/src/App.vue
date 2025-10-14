@@ -1,24 +1,19 @@
 <script setup>
-import {  RouterView } from 'vue-router'
-import LayoutContainer from './components/LayoutContainer.vue';
-
+import { RouterView } from 'vue-router'
+import LayoutContainer from './components/LayoutContainer.vue'
+import LayoutHeader from './components/LayoutHeader.vue'
 </script>
 
 <template>
-<div class="bg-gray-100 w-full min-h-screen flex flex-col">
-
-  <header class="bg-white fixed top-0 left-0 right-0">
-    <LayoutContainer >Шапка </LayoutContainer>
-
-  </header>
-  <main class="flex-1 mt-26">
-    <RouterView />
-
-  </main>
-  <footer  class="bg-white">
-    <LayoutContainer >Подвал </LayoutContainer>
-
-  </footer>
-</div>
+  <div class="flex min-h-screen w-full flex-col bg-gray-100">
+    <header class="fixed top-0 right-0 left-0 bg-white">
+      <LayoutHeader />
+    </header>
+    <main class="mt-26 flex-1">
+      <RouterView />
+    </main>
+    <footer class="bg-white">
+      <LayoutContainer>Подвал </LayoutContainer>
+    </footer>
+  </div>
 </template>
-
