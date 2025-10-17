@@ -31,7 +31,6 @@ onBeforeMount(() => {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       fetchWeatherData(position.coords.latitude, position.coords.longitude, headers)
-      console.log(position)
     },
     fetchWeatherData(lat, lon, headers),
   )
