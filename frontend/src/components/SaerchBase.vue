@@ -1,0 +1,49 @@
+<script setup lang="ts">
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { ref, watch } from 'vue'
+
+const searchQuery = ref('')
+
+const props = defineProps({
+  onSearch: {
+    type: Function,
+    required: true,
+  },
+})
+
+const handleSearch = () => {
+  props.onSearch(searchQuery.value)
+}
+
+let debouncedTimer = null
+
+const debouncedSearch = (query) => {
+  clearTimeout(debouncedTimer)
+  debouncedTimer = setTimeout(() => {
+    props.onSearch(query)
+  }, 2000)
+}
+
+watch(searchQuery, (newQuery) => {
+  debouncedSearch(newQuery)
+})
+</script>
+
+<template>
+  <form @submit.prevent="handleSearch" class="relative mt-12">
+    <input
+      type="text"
+      class="w-full rounded-md border border-gray-300 bg-white p-2 pr-20"
+      name="search"
+      placeholder="Поиск по блогу"
+      v-model="searchQuery"
+    />
+    <button
+      type="submit"
+      class="absolute right-0 h-[100%] cursor-pointer rounded-md bg-blue-500 px-5 py-2 text-white ring-0 hover:bg-blue-500"
+    >
+      <FontAwesomeIcon :icon="faMagnifyingGlass" />
+    </button>
+  </form>
+</template>

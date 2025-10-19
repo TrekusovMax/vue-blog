@@ -15,7 +15,7 @@ onBeforeMount(() => {
 <template>
   <section class="my-8">
     <h2 class="sr-only">Последние статьи</h2>
-    <ul class="grid grid-cols-3 gap-8">
+    <ul v-if="articlesStore.articles.length" class="grid grid-cols-3 gap-8">
       <li class="flex" v-for="article in articlesStore.articles" :key="article.id">
         <article class="flex w-full">
           <RouterLink
@@ -40,5 +40,6 @@ onBeforeMount(() => {
         </article>
       </li>
     </ul>
+    <p v-else class="text-center text-gray-500">Нет статей для отображения</p>
   </section>
 </template>

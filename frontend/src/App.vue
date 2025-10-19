@@ -6,7 +6,7 @@ import LayoutFooter from './components/LayoutFooter.vue'
 
 <template>
   <div class="flex min-h-screen w-full flex-col bg-gray-100">
-    <header class="fixed top-0 right-0 left-0 bg-white">
+    <header class="fixed top-0 right-0 left-0 z-10 bg-white">
       <LayoutHeader />
     </header>
     <main class="mt-26 flex-1">
