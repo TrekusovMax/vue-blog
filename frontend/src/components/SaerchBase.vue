@@ -13,15 +13,17 @@ const props = defineProps({
 })
 
 const handleSearch = () => {
-  props.onSearch(searchQuery.value)
+  clearTimeout(debouncedTimer)
+  props.onSearch({ search: searchQuery.value })
 }
 
 let debouncedTimer = null
 
 const debouncedSearch = (query) => {
   clearTimeout(debouncedTimer)
+
   debouncedTimer = setTimeout(() => {
-    props.onSearch(query)
+    props.onSearch({ search: query })
   }, 2000)
 }
 

@@ -1,6 +1,7 @@
 <script setup>
 import ArticlesList from '@/components/ArticlesList.vue'
 import LayoutContainer from '@/components/LayoutContainer.vue'
+import PaginationBase from '@/components/PaginationBase.vue'
 import SaerchBase from '@/components/SaerchBase.vue'
 
 import { useArticlesStore } from '@/store/articles.js'
@@ -12,6 +13,12 @@ const articlesStore = useArticlesStore()
     <LayoutContainer>
       <SaerchBase :on-search="articlesStore.fetchArticles" />
       <ArticlesList />
+      <PaginationBase
+        v-if="articlesStore.totalPage > 1"
+        :current-page="articlesStore.currentPage"
+        :total-pages="articlesStore.totalPage"
+        :on-page-changes="articlesStore.fetchArticles"
+      />
     </LayoutContainer>
   </main>
 </template>
