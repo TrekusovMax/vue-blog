@@ -1,8 +1,8 @@
 <script setup>
 import ArticlesList from '@/components/ArticlesList.vue'
-import LayoutContainer from '@/components/LayoutContainer.vue'
-import PaginationBase from '@/components/PaginationBase.vue'
-import SaerchBase from '@/components/SaerchBase.vue'
+import LayoutContainer from '@/components/layout/LayoutContainer.vue'
+import PaginationBase from '@/components/base/PaginationBase.vue'
+import SaerchBase from '@/components/base/SearchBase.vue'
 
 import { useArticlesStore } from '@/store/articles.js'
 const articlesStore = useArticlesStore()

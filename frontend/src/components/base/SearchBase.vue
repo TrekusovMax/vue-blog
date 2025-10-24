@@ -2,6 +2,7 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { ref, watch } from 'vue'
+import ButtonBase from './ButtonBase.vue'
 
 const searchQuery = ref('')
 
@@ -41,11 +42,8 @@ watch(searchQuery, (newQuery) => {
       placeholder="Поиск по блогу"
       v-model="searchQuery"
     />
-    <button
-      type="submit"
-      class="absolute right-0 h-[100%] cursor-pointer rounded-md bg-blue-500 px-5 py-2 text-white ring-0 hover:bg-blue-500"
-    >
+    <ButtonBase type="submit" class="absolute right-0 h-[100%] ring-0">
       <FontAwesomeIcon :icon="faMagnifyingGlass" />
-    </button>
+    </ButtonBase>
   </form>
 </template>

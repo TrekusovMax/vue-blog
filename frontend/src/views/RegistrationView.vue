@@ -17,6 +17,10 @@ const schema = yup.object({
     .string()
     .required('Пароль обязателен')
     .min(6, 'Пароль должен быть не менее 6 символов'),
+  confirmedPassword: yup
+    .string()
+    .required('Повтор пароля обязателен')
+    .oneOf([yup.ref('password'), null], 'Пароли должны совпадать'),
 })
 const userStore = useUserStore()
 const errorMessage = ref('')
@@ -24,14 +28,13 @@ const router = useRouter()
 
 const handleSubmit = async (formdata) => {
   errorMessage.value = ''
-
   try {
-    const data = await userStore.login(formdata.login, formdata.password)
+    const data = await userStore.register(formdata.login, formdata.password)
 
     if (data?.error) {
       throw new Error(data?.error)
     }
-    userStore.user = data.user
+    userStore.user.value = data.user
     router.push('/')
   } catch (error) {
     errorMessage.value = error
@@ -41,7 +44,7 @@ const handleSubmit = async (formdata) => {
 
 <template>
   <div class="py-8">
-    <h1 class="my-4 text-center text-2xl font-bold">Авторизация</h1>
+    <h1 class="my-4 text-center text-2xl font-bold">Регистрация</h1>
     <Form
       action=""
       class="mx-auto w-full max-w-sm rounded-md bg-white p-6 shadow-md"
@@ -58,14 +61,12 @@ const handleSubmit = async (formdata) => {
         <InputBase type="password" name="password" id="password" />
         <InputErrorBase name="password" />
       </div>
-
-      <ButtonBase type="submit" class="w-full">Войти</ButtonBase>
-      <p class="text-center text-gray-500">
-        Новый пользователь?
-        <RouterLink to="/register" class="text-blue-500 hover:underline"
-          >Заргистрироваться</RouterLink
-        >
-      </p>
+      <div class="mb-4">
+        <LabelBase for="confirmedPassword">Повтор пароля</LabelBase>
+        <InputBase type="password" name="confirmedPassword" id="confirmedPassword" />
+        <InputErrorBase name="confirmedPassword" />
+      </div>
+      <ButtonBase type="submit" class="w-full">Заргистрироваться</ButtonBase>
       <MessageBox type="error">{{ errorMessage }}</MessageBox>
     </Form>
   </div>

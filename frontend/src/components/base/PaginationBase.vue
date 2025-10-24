@@ -36,6 +36,7 @@ const goToPage = (page) => {
     <li>
       <button
         @click="goToPage(currentPage - 1)"
+        :disabled="currentPage === 1"
         :class="currentPage === 1 ? disabledClass : activeClass"
       >
         Предыдущая
@@ -47,13 +48,18 @@ const goToPage = (page) => {
     <li>
       <button
         @click="goToPage(currentPage + 1)"
-        :class="totalPages === 1 ? disabledClass : activeClass"
+        :disabled="totalPages === currentPage"
+        :class="totalPages === currentPage ? disabledClass : activeClass"
       >
         Следующая
       </button>
     </li>
     <li>
-      <button @click="goToPage(totalPages)" :class="totalPages === 1 ? disabledClass : activeClass">
+      <button
+        @click="goToPage(totalPages)"
+        :disabled="totalPages === currentPage"
+        :class="totalPages === currentPage ? disabledClass : activeClass"
+      >
         В конец
       </button>
     </li>

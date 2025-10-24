@@ -8,7 +8,20 @@ import {
   faFile,
   faPeopleGroup,
 } from '@fortawesome/free-solid-svg-icons'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '@/store/user'
+
+const userStore = useUserStore()
+const route = useRoute()
+const router = useRouter()
+
+const handlerLogout = async () => {
+  const response = await userStore.logout()
+
+  if (!response.error && route.meta.requireAuth) {
+    router.push('/')
+  }
+}
 </script>
 
 <template>
@@ -26,25 +39,40 @@ import { RouterLink } from 'vue-router'
         <p>Разбор ошибок</p>
       </div>
       <div class="flex flex-col items-end">
-        <p class="mr-8 mb-2.5">
-          <!-- Username | <strong><FontAwesomeIcon :icon="faArrowRightFromBracket" /></strong> -->
+        <div class="mb-3">
           <RouterLink
+            v-if="!userStore.isAutorized"
             to="/login"
             class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
           >
             Войти
           </RouterLink>
-        </p>
+          <div class="text-right" v-else>
+            <span>{{ userStore.user.login }}</span>
+            &nbsp;|&nbsp;
+            <button class="cursor-pointer hover:text-blue-500" @click="handlerLogout">
+              <strong><FontAwesomeIcon :icon="faArrowRightFromBracket" /></strong>
+            </button>
+          </div>
+        </div>
         <p>
           <a href="#" @click="$router.back()" aria-label="Назад" class="hover:text-blue-500"
             ><FontAwesomeIcon :icon="faBackward"
           /></a>
           &nbsp; &nbsp;
-          <RouterLink to="/post" class="hover:text-blue-500" aria-label="Новая статья"
+          <RouterLink
+            v-if="userStore.isAutorized"
+            to="/post"
+            class="hover:text-blue-500"
+            aria-label="Новая статья"
             ><FontAwesomeIcon :icon="faFile"
           /></RouterLink>
           &nbsp; &nbsp;
-          <RouterLink to="/users" class="hover:text-blue-500" aria-label="Пользователи"
+          <RouterLink
+            v-if="userStore.isAutorized"
+            to="/users"
+            class="hover:text-blue-500"
+            aria-label="Пользователи"
             ><FontAwesomeIcon :icon="faPeopleGroup"
           /></RouterLink>
         </p>

@@ -3,7 +3,7 @@ import { onBeforeMount, ref } from 'vue'
 import LayoutContainer from './LayoutContainer.vue'
 
 const year = new Date().toLocaleString('ru', { year: 'numeric' })
-const city = ref('')
+const city = ref('Москва')
 const temp = ref(0)
 const precStrength = ref(0)
 
@@ -20,6 +20,9 @@ const fetchWeatherData = (lat, lon, headers) => {
       temp.value = json.fact.temp
       precStrength.value = json.fact.prec_strength
     })
+    .catch((error) => {
+      console.error('Error fetching weather data:', error)
+    })
 }
 
 onBeforeMount(() => {
@@ -30,9 +33,9 @@ onBeforeMount(() => {
   }
   navigator.geolocation.getCurrentPosition(
     (position) => {
-      fetchWeatherData(position.coords.latitude, position.coords.longitude, headers)
+      // fetchWeatherData(position.coords.latitude, position.coords.longitude, headers)
     },
-    fetchWeatherData(lat, lon, headers),
+    //fetchWeatherData(lat, lon, headers),
   )
 })
 </script>
