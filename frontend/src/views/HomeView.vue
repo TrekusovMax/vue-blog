@@ -4,7 +4,7 @@ import LayoutContainer from '@/components/layout/LayoutContainer.vue'
 import PaginationBase from '@/components/base/PaginationBase.vue'
 import SaerchBase from '@/components/base/SearchBase.vue'
 
-import { useArticlesStore } from '@/store/articles.js'
+import { useArticlesStore } from '@/stores/articles.js'
 const articlesStore = useArticlesStore()
 </script>
 

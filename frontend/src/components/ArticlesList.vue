@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCalendar, faComment } from '@fortawesome/free-solid-svg-icons'
 import { RouterLink } from 'vue-router'
-import { useArticlesStore } from '@/store/articles.js'
+import { useArticlesStore } from '@/stores/articles.js'
 import { onBeforeMount } from 'vue'
 import { formatDate } from '@/utils/dateFormaters'
 

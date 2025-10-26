@@ -4,7 +4,7 @@ import InputBase from '@/components/base/InputBase.vue'
 import InputErrorBase from '@/components/base/InputErrorBase.vue'
 import LabelBase from '@/components/base/LabelBase.vue'
 import MessageBox from '@/components/base/MessageBox.vue'
-import { useUserStore } from '@/store/user'
+import { useUserStore } from '@/stores/user'
 import { Form } from 'vee-validate'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -63,7 +63,7 @@ const handleSubmit = async (formdata) => {
       <p class="text-center text-gray-500">
         Новый пользователь?
         <RouterLink to="/register" class="text-blue-500 hover:underline"
-          >Заргистрироваться</RouterLink
+          >Зарегистрироваться</RouterLink
         >
       </p>
       <MessageBox type="error">{{ errorMessage }}</MessageBox>

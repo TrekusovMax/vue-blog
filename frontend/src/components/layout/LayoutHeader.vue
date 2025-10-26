@@ -9,7 +9,7 @@ import {
   faPeopleGroup,
 } from '@fortawesome/free-solid-svg-icons'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import { useUserStore } from '@/store/user'
+import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -61,7 +61,7 @@ const handlerLogout = async () => {
           /></a>
           &nbsp; &nbsp;
           <RouterLink
-            v-if="userStore.isAutorized"
+            v-if="userStore.isAutorized && userStore.isAdmin"
             to="/post"
             class="hover:text-blue-500"
             aria-label="Новая статья"
@@ -69,7 +69,7 @@ const handlerLogout = async () => {
           /></RouterLink>
           &nbsp; &nbsp;
           <RouterLink
-            v-if="userStore.isAutorized"
+            v-if="userStore.isAutorized && userStore.isAdmin"
             to="/users"
             class="hover:text-blue-500"
             aria-label="Пользователи"

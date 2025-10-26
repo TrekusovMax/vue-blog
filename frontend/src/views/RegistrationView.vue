@@ -4,7 +4,7 @@ import InputBase from '@/components/base/InputBase.vue'
 import InputErrorBase from '@/components/base/InputErrorBase.vue'
 import LabelBase from '@/components/base/LabelBase.vue'
 import MessageBox from '@/components/base/MessageBox.vue'
-import { useUserStore } from '@/store/user'
+import { useUserStore } from '@/stores/user'
 import { Form } from 'vee-validate'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -34,7 +34,7 @@ const handleSubmit = async (formdata) => {
     if (data?.error) {
       throw new Error(data?.error)
     }
-    userStore.user.value = data.user
+    userStore.user = data.user
     router.push('/')
   } catch (error) {
     errorMessage.value = error
