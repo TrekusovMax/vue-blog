@@ -8,9 +8,16 @@ const initUser = {
   roleId: null,
   registeredAt: '',
 }
+const getUserData = () => {
+  const data = localStorage.getItem('user')
+  if (!data) {
+    return initUser
+  }
+  return JSON.parse(data)
+}
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref(initUser)
+  const user = ref(getUserData())
 
   const isAutorized = computed(() => !!user.value.id)
   const isAdmin = computed(() => user.value.id && user.value.roleId === ROLES.ADMIN)
@@ -30,6 +37,7 @@ export const useUserStore = defineStore('user', () => {
         throw new Error('Ошибка регистрации пользователя')
       }
       const data = await response.json()
+      localStorage.setItem('user', JSON.stringify(data.user))
       return data
     } catch (error) {
       console.error(error)
@@ -50,6 +58,7 @@ export const useUserStore = defineStore('user', () => {
       }
 
       const data = await response.json()
+      localStorage.setItem('user', JSON.stringify(data.user))
       return data
     } catch (error) {
       console.error(error)
@@ -69,6 +78,7 @@ export const useUserStore = defineStore('user', () => {
       if (!data.error) {
         user.value = initUser
       }
+      localStorage.removeItem('user')
       return data
     } catch (error) {
       console.error(error)

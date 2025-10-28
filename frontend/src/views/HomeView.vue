@@ -2,7 +2,7 @@
 import ArticlesList from '@/components/ArticlesList.vue'
 import LayoutContainer from '@/components/layout/LayoutContainer.vue'
 import PaginationBase from '@/components/base/PaginationBase.vue'
-import SaerchBase from '@/components/base/SearchBase.vue'
+import SearchBase from '@/components/base/SearchBase.vue'
 
 import { useArticlesStore } from '@/stores/articles.js'
 const articlesStore = useArticlesStore()
@@ -11,7 +11,7 @@ const articlesStore = useArticlesStore()
 <template>
   <main>
     <LayoutContainer>
-      <SaerchBase :on-search="articlesStore.fetchArticles" />
+      <SearchBase :on-search="articlesStore.fetchArticles" />
       <ArticlesList />
       <PaginationBase
         v-if="articlesStore.totalPage > 1"
