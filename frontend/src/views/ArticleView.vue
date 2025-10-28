@@ -50,7 +50,7 @@ const formatDateOprions = {
     <div
       v-if="
         !articleStore.isInEditMode &&
-        (userStore.isAutorized || articleStore.article?.comments.length > 0)
+        (userStore.isAutorized || articleStore.article?.comments?.length > 0)
       "
     >
       <h2 class="mb-4 text-2xl font-bold">Коментарии</h2>

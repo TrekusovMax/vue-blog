@@ -18,7 +18,7 @@ const router = useRouter()
 const handlerLogout = async () => {
   const response = await userStore.logout()
 
-  if (!response.error && route.meta.requireAuth) {
+  if (!response.error && route.meta.requireAdmin) {
     router.push('/')
   }
 }
