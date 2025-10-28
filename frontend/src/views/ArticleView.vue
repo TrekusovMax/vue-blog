@@ -6,10 +6,14 @@ import CommentsList from '@/components/CommentsList.vue'
 import LayoutContainer from '@/components/layout/LayoutContainer.vue'
 import { useArticleStore } from '@/stores/article'
 import { useUserStore } from '@/stores/user'
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref } from 'vue'
+import NotFoundView from './NotFoundView.vue'
 
 const articleStore = useArticleStore()
 const userStore = useUserStore()
+
+const notFound = ref(false)
+
 const props = defineProps({
   id: {
     type: String,
@@ -19,8 +23,12 @@ const props = defineProps({
 
 onBeforeMount(async () => {
   try {
-    await articleStore.fetchArticle(props.id)
+    const response = await articleStore.fetchArticle(props.id)
+    if (response.error) {
+      notFound.value = true
+    }
   } catch (error) {
+    notFound.value = true
     console.error(error)
   }
 })
@@ -35,7 +43,8 @@ const formatDateOprions = {
 </script>
 
 <template>
-  <LayoutContainer class="mt-4">
+  <NotFoundView v-if="notFound" />
+  <LayoutContainer v-else class="mt-4">
     <ArticleDetailsForm v-if="articleStore.isInEditMode" />
     <ArticleDetails v-else :date-options="formatDateOprions" />
     <div

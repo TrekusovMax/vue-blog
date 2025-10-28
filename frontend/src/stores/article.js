@@ -17,6 +17,7 @@ export const useArticleStore = defineStore('article', () => {
       } else {
         article.value = data.data
       }
+      return data
     } catch (error) {
       console.error('Ошибка получения статьи', error)
     }
