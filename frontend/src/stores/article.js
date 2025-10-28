@@ -66,6 +66,24 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  const addArticle = async (newArticle) => {
+    try {
+      const response = await fetch(`/api/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newArticle),
+      })
+      if (!response.ok) {
+        throw new Error('Ошибка запроса добавления статьи')
+      }
+      const data = await response.json()
+
+      return data
+    } catch (error) {
+      console.error('Ошибка добавления статьи', error)
+    }
+  }
+
   const addComment = async (newComment) => {
     try {
       const response = await fetch(`/api/posts/${article.value.id}/comments`, {
@@ -115,6 +133,7 @@ export const useArticleStore = defineStore('article', () => {
     deleteArticle,
     addComment,
     deleteComment,
+    addArticle,
   }
 })
 
