@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { onBeforeMount, ref } from 'vue'
 import { formatDate } from '@/utils/dateFormaters'
 import { useRolesStore } from '@/stores/roles'
+import InputBase from '@/components/base/InputBase.vue'
 const usersStore = useUsersStore()
 const rolesStore = useRolesStore()
 const errorMessage = ref('')
@@ -92,7 +93,8 @@ const handleUserRole = async (user) => {
             </td>
             <td class="p-2">
               <form action="" @submit.prevent="" class="flex gap-2">
-                <select
+                <InputBase
+                  as="select"
                   :name="`user-${user.id}-role`"
                   v-model="user.roleId"
                   class="w-full appearance-none rounded-md border border-gray-300 p-2"
@@ -104,7 +106,7 @@ const handleUserRole = async (user) => {
                   >
                     {{ role.name }}
                   </option>
-                </select>
+                </InputBase>
                 <button
                   @click.prevent="handleUserRole(user)"
                   type="submit"
