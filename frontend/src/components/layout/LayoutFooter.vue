@@ -16,6 +16,8 @@ const fetchWeatherData = (lat, lon, headers) => {
   })
     .then((response) => response.json())
     .then((json) => {
+      console.log(json)
+
       city.value = json.info.tzinfo.name.match(/[^/]+$/)[0]
       temp.value = json.fact.temp
       precStrength.value = json.fact.prec_strength
@@ -33,9 +35,9 @@ onBeforeMount(() => {
   }
   navigator.geolocation.getCurrentPosition(
     (position) => {
-      // fetchWeatherData(position.coords.latitude, position.coords.longitude, headers)
+      fetchWeatherData(position.coords.latitude, position.coords.longitude, headers)
     },
-    //fetchWeatherData(lat, lon, headers),
+    fetchWeatherData(lat, lon, headers),
   )
 })
 </script>
@@ -51,7 +53,7 @@ onBeforeMount(() => {
         <p>
           {{ city }}, <time :datetime="year">{{ year }}</time>
         </p>
-        <p>Погода: солнечно, {{ temp }}&deg;C</p>
+        <p>Погода: {{ temp }}&deg;C</p>
       </div>
     </div>
   </LayoutContainer>

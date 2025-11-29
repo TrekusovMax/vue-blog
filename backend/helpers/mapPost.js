@@ -1,15 +1,17 @@
-const mongoose = require("mongoose");
-const mapComment = require("./mapComment");
+import mongoose from 'mongoose'
+import mapComments from './mapComments.js'
 
-module.exports = function (post) {
+export default function mapPost(post) {
   return {
-    id: post._id,
+    id: post.id,
     title: post.title,
     imageUrl: post.image,
     content: post.content,
     comments: post.comments.map((comment) =>
-      mongoose.isObjectIdOrHexString(comment) ? comment : mapComment(comment)
+      mongoose.isObjectIdOrHexString(comment)
+        ? comment
+        : mapComments(comment),
     ),
     publishedAt: post.createdAt,
-  };
-};
+  }
+}

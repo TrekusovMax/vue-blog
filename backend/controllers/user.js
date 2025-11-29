@@ -1,71 +1,55 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
-const { generate } = require('../helpers/token');
-const ROLES = require('../constants/roles')
+import bcrypt from 'bcrypt'
 
-// register
+import ROLES from '../constants/roles.js'
+import { User } from '../models/User.js'
+import mapUser from '../helpers/mapUser.js'
+import { generateToken } from '../helpers/token.js'
 
-async function register(login, password) {
-    if (!password) {
-        throw new Error('Password is empty');
-    }
+export async function register(login, password) {
+  if (!password) {
+    throw new Error('Password is empty')
+  }
+  const hashedPassword = await bcrypt.hash(password, 10)
 
-    const passwordHash = await bcrypt.hash(password, 10);
+  const user = await User.create({ login, password: hashedPassword })
+  const token = generateToken({ id: user.id })
 
-    const user = await User.create({ login, password: passwordHash })
-    const token = generate({ id: user.id });
-
-    return { user, token };
+  return { user: mapUser(user), token }
 }
 
-// login
+export async function login(login, password) {
+  const user = await User.findOne({ login })
 
-async function login(login, password) {
-    const user = await User.findOne({ login });
+  if (!user) {
+    throw new Error('User not found')
+  }
 
-    if (!user) {
-        throw new Error('User not found')
-    }
+  const isPasswordValid = await bcrypt.compare(password, user.password)
 
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error('Invalid password')
+  }
 
-    if (!isPasswordMatch) {
-        throw new Error('Wrong password')
-    }
+  const token = generateToken({ id: user.id })
 
-    const token = generate({ id: user.id });
-
-    return { token, user };
+  return { user: mapUser(user), token }
 }
 
-function getUsers() {
-    return User.find();
+export function getUsers() {
+  return User.find()
+}
+export function getRoles() {
+  return [
+    { id: ROLES.ADMIN, name: 'Admin' },
+    { id: ROLES.MODERATOR, name: 'Moderator' },
+    { id: ROLES.USER, name: 'User' },
+  ]
 }
 
-function getRoles() {
-    return [
-        { id: ROLES.ADMIN, name: 'Admin' },
-        { id: ROLES.MODERATOR, name: 'Moderator' },
-        { id: ROLES.USER, name: 'User' },
-    ]
+export async function deleteUser(userId) {
+  return User.deleteOne({ _id: userId })
 }
 
-// delete
-
-function deleteUser(id) {
-    return User.deleteOne({ _id: id })
-}
-
-// edit (roles)
-function updateUser(id, userData) {
-    return User.findByIdAndUpdate(id, userData, { returnDocument: 'after' })
-}
-
-module.exports = {
-    register,
-    login,
-    getUsers,
-    getRoles,
-    deleteUser,
-    updateUser
+export async function updateUser(id, userData) {
+  return User.findByIdAndUpdate(id, userData, { returnDocument: 'after' })
 }

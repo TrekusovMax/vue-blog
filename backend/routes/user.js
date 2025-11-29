@@ -1,35 +1,61 @@
-const express = require('express')
+import express from 'express'
+import {
+  getUsers,
+  getRoles,
+  updateUser,
+  deleteUser,
+} from '../controllers/user.js'
+import hasRole from '../middlewares/hasRole.js'
+import authenticated from '../middlewares/authenticated.js'
+import mapUser from '../helpers/mapUser.js'
+import ROLES from '../constants/roles.js'
+
 const router = express.Router({ mergeParams: true })
-const { getUsers, getRoles, updateUser, deleteUser } = require('../controllers/user')
-const hasRole = require('../middlewares/hasRole')
-const authenticated = require('../middlewares/authenticated')
-const mapUser = require('../helpers/mapUser')
-const ROLES = require('../constants/roles')
 
-router.get('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const users = await getUsers();
+router.get(
+  '/',
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    const users = await getUsers()
 
-  res.send({ data: users.map(mapUser) })
-})
+    res.send({ data: users.map(mapUser) })
+  },
+)
 
-router.get('/roles', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const roles = getRoles();
+router.get(
+  '/roles',
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    const roles = getRoles()
 
-  res.send({ data: roles })
-})
+    res.send({ data: roles })
+  },
+)
 
-router.patch('/:id', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const newUser = await updateUser(req.params.id, {
-    role: req.body.roleId
-  })
+router.patch(
+  '/:id',
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    const newUser = await updateUser(req.params.id, {
+      role: req.body.roleId,
+    })
 
-  res.send({ data: mapUser(newUser) })
-})
+    res.send({ data: mapUser(newUser) })
+  },
+)
 
-router.delete('/:id', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  await deleteUser(req.params.id)
+router.delete(
+  '/:id',
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    await deleteUser(req.params.id)
 
-  res.send({ error: null })
-})
+    res.send({ error: null })
+  },
+)
 
-module.exports = router
+export default router

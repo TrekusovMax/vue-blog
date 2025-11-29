@@ -1,23 +1,33 @@
-const express = require('express')
+import express from 'express'
+import {
+  getPosts,
+  getPost,
+  addPost,
+  editPost,
+  deletePost,
+} from '../controllers/post.js'
+import { addComment, deleteComment } from '../controllers/comment.js'
+import authenticated from '../middlewares/authenticated.js'
+import hasRole from '../middlewares/hasRole.js'
+import mapPost from '../helpers/mapPost.js'
+import mapComment from '../helpers/mapComments.js'
+import ROLES from '../constants/roles.js'
+
 const router = express.Router({ mergeParams: true })
-const { getPosts, getPost, addPost, editPost, deletePost } = require('../controllers/post')
-const { addComment, deleteComment } = require('../controllers/comment')
-const authenticated = require('../middlewares/authenticated')
-const hasRole = require('../middlewares/hasRole')
-const mapPost = require('../helpers/mapPost')
-const mapComment = require('../helpers/mapComment')
-const ROLES = require('../constants/roles')
 
 router.get('/', async (req, res) => {
-  const { posts, lastPage } = await getPosts(req.query.search, req.query.limit, req.query.page)
+  const { posts, lastPage } = await getPosts(
+    req.query.search,
+    req.query.limit,
+    req.query.page,
+  )
 
   res.send({ data: { lastPage, posts: posts.map(mapPost) } })
 })
 
 router.get('/:id', async (req, res) => {
   const post = await getPost(req.params.id)
-  console.log('post:', post)
-  console.log('mapped post:', mapPost(post))
+
   res.send({ data: mapPost(post) })
 })
 
@@ -38,33 +48,48 @@ router.delete(
     await deleteComment(req.params.postId, req.params.commentId)
 
     res.send({ error: null })
-  }
+  },
 )
 
-router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const newPost = await addPost({
-    title: req.body.title,
-    content: req.body.content,
-    image: req.body.imageUrl,
-  })
+router.post(
+  '/',
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    const newPost = await addPost({
+      title: req.body.title,
+      content: req.body.content,
+      image: req.body.imageUrl,
+    })
 
-  res.send({ data: mapPost(newPost) })
-})
+    res.send({ data: mapPost(newPost) })
+  },
+)
 
-router.patch('/:id', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const updatedPost = await editPost(req.params.id, {
-    title: req.body.title,
-    content: req.body.content,
-    image: req.body.imageUrl,
-  })
+router.patch(
+  '/:id',
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    const updatedPost = await editPost(req.params.id, {
+      title: req.body.title,
+      content: req.body.content,
+      image: req.body.imageUrl,
+    })
 
-  res.send({ data: mapPost(updatedPost) })
-})
+    res.send({ data: mapPost(updatedPost) })
+  },
+)
 
-router.delete('/:id', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  await deletePost(req.params.id)
+router.delete(
+  '/:id',
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    await deletePost(req.params.id)
 
-  res.send({ error: null })
-})
+    res.send({ error: null })
+  },
+)
 
-module.exports = router
+export default router

@@ -1,8 +1,7 @@
-module.exports = function (user) {
-    return {
-        id: user.id,
-        login: user.login,
-        roleId: user.role,
-        registeredAt: user.createdAt
-    }
+export default function mapUser(user) {
+  return {
+    id: user.id,
+    login: user.login,
+    role: user.role,
+  }
 }

@@ -1,22 +1,13 @@
-const User = require('../models/User')
-const { verify } = require("../helpers/token")
+import { verifyToken } from '../helpers/token.js'
+import { User } from '../models/User.js'
 
-module.exports = async function (req, res, next) {
-    try {
-        const tokenData = verify(req.cookies.token);
+export default async function (req, res, next) {
+  const tokenData = verifyToken(req.cookies.token)
+  const user = await User.findOne({ _id: tokenData.id })
 
-        const user = await User.findOne({ _id: tokenData.id });
-
-        if (!user) {
-            res.send({ error: 'Authenticated user not found' })
-
-            return;
-        }
-
-        req.user = user;
-
-        next();
-    } catch (e) {
-        res.send({ error: e.message || 'Token error' })
-    }
+  if (!user) {
+    return res.status(401).send({ error: 'Unauthorized' })
+  }
+  req.user = user
+  next()
 }

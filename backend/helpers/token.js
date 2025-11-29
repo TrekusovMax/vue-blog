@@ -1,15 +1,10 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken'
+const sign = process.env.JWT_SECRET
 
-const sign = process.env.JWT_SECRET;
+export function generateToken(data) {
+  return jwt.sign(data, sign, { expiresIn: '7d' })
+}
 
-module.exports = {
-    generate(data) {
-        return jwt.sign(data, sign, { expiresIn: '30d' })
-    },
-    verify(token) {
-        if (!token) {
-            throw new Error('Invalid token')
-        }
-        return jwt.verify(token, sign)
-    }
+export function verifyToken(token) {
+  return jwt.verify(token, sign)
 }
