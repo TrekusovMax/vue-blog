@@ -2,6 +2,7 @@ export default function mapUser(user) {
   return {
     id: user.id,
     login: user.login,
-    role: user.role,
+    roleId: user.role,
+    registeredAt: user.createdAt,
   }
 }

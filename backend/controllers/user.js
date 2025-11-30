@@ -31,8 +31,7 @@ export async function login(login, password) {
   }
 
   const token = generateToken({ id: user.id })
-
-  return { user: mapUser(user), token }
+  return { user, token }
 }
 
 export function getUsers() {
