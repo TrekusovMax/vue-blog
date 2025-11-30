@@ -8,7 +8,7 @@ import routes from './routes/index.js'
 const port = 3002
 const app = express()
 
-app.use(express.static('../frontend/build'))
+app.use(express.static('../frontend/dist'))
 
 app.use(cookieParser())
 app.use(express.json())
